@@ -1,0 +1,106 @@
+There are 6 16 bit processor registers.
+There are 10 32 bit processor registers.
+
+Main registers:
+- General registers
+  - Data registers
+  - Pointer registers
+  - Index registers
+- Control registers
+- Segment registers
+
+Data registers
+    64 bit registers are RAX, RBX, RCX, RDX
+    32 bit registers are EAX, EBX, ECX, EDX
+    Half of the storage of these registers is used to represent AX, BX, CX, DX registers (16 bit registers)
+     Half of the storage of 16 bit registers is used to represent AH, BH, CH, DH, AL, BL, CL, DL registers (8 bit registers)
+
+    AX - Accumulator: Mainly used for IO, Arithmetic instructions
+    BX - Base: Used for addressing index addresses
+    CX - Counter: Store the loop count in iterations
+    DX - Data: Can be used for IO, with AX
+
+Special registers
+    RSP: Points to the current top of the stack.
+    RBP: Base pointer during function calls
+    RIP: Points to the next instruction to be executed
+
+XMM registers
+    They are 128 bit registers and are used to support 64-bit and 32-bit floating-point operations and Single Instruction Multiple Data (SIMD) instructions, which allows a single instruction to be applied to multiple data items simultaneously.
+    They are named xmm0, xmm1, xmm2, ..., xmm15
+    Recent x86-64 processors support 256-bit XMM registers.
+
+Memory layout for programs is:
+    stack
+    heap
+    BSS - uninitialized data
+    data - decalared variables with initial value at assemble-time
+    text (code)
+    reserved - not available to user programs
+
+Memory hierarchy (gets larger, slower, less expensive as you go downwards)
+    CPU registers - 1 ns
+    Cache - 5-60 ns
+    Primary storage - 100-150 ns
+    Secondary storage - 3-15 ms
+    Tertiary storage
+
+Two's complement
+    Take the number
+    Reverse all the bits
+    Add 1
+
+Floating points are stored in IEEE 754 32-bit floating point standard??
+ASCII Characters are stored in 8-bits.
+
+
+==================== ASSEMBLY ====================
+
+When specifying decimal, no special notation is required
+When specifying hex, 0x must be added as a prefix
+When specifying octal, q must be add as a suffix
+
+To define a constant,
+    <name> equ <value>
+
+To initalize a variable in the data section,
+    <variable name> <data type> <initial value>
+
+    Data types are:
+      db: 8-bit
+      dw: 16-bit
+      dd: 32-bit
+      dq: 64-bit
+      ddq: 128-bit integer
+      dt: 128-bit float
+
+    Strings are defined through db
+
+  To initalize a variable in the bss section,
+    <variable name> <res type> <count>
+
+    Res types are:
+      resb: 8-bit
+      resw: 16-bit
+      resd: 32-bit
+      resq: 64-bit
+      resdq: 128-bit
+
+  Code is placed in the text section, which includes headers of labels that define the program entry point.
+  Basic text section has:
+    section .text
+    global _start
+    _start:
+
+Tool chain:
+    Assembly Language Source File
+    Assemble
+    List File/Object File
+    Link
+    Executable File
+    Load
+    RAM
+
+There
+
+
