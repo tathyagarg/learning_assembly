@@ -101,6 +101,56 @@ Tool chain:
     Load
     RAM
 
-There
-
+Instructions:
+    mov <dest>, <src>
+    lea <reg64>, <mem>
+    movzx <dest>, <src> : Widening operator
+    cbw : Convert byte in AL to word in AX
+    cwd : Convert word in AX to dw dx:ax registers
+    cwde : Convert word in AX to dw in EAX
+    cdq : Convert dw in AX to qw in EAX:EDX
+    cdqe : Convert dw in EAX to qw in RAX
+    cqo : Convert qw in RAX to dqw in RAX:RDX
+    add <dest>, <src> : Add dest and src and store in dest
+    inc <operand> : Add 1 to operand
+    adc <dest>, <src> : Add dest and src and previous carry and store in dest
+    sub <dest>, <src> : Subtract sub from dest and store in dest
+    dec <operand> : Subtract 1 from operand
+    mul <src> : Multiply A register with src, store in A register
+    imul <src> : Multiply A register and src, store in A register
+    imul <src>, <operand/immediate> : Multiply src and the operand, store in src
+    div <src> : Divide A register by src, store in A register
+    idiv <src> :
+        Byte: AL = AX / src, rem in AH
+        Word: AX = DX:AX / src, rem in DX
+        Dw: EAX = EAX / src, rem in EDX
+        Qw: RAX = RAX / src, rem in RDX
+    and <dest>, <src> : Perform dest &&= src
+    or <dest>, <src> : Perform dest ||= src
+    xor <dest>, <src> : Perform dest ^= src
+    not <op> : Perform op = !op
+    shl <dest>, <immediate/CL> : Logical left shift, fills 0s to right
+    shr <dest>, <immediate/CL> : Logical right shift, fills 0s to the left
+    sal <dest>, <immediate/CL> : Arithmetic left shift, fills 0s to right
+    sar <dest>, <immediate/CL> : Arithmetic right shift, fills with MSB to left
+    rol <dest>, <immediate/CL> : Rotate leftwards on dest
+    ror <dest>, <immediate/CL> : Rotate rightwards on dest
+    cmp <op1>, <op2> : Compare op1 and op2, result stored in rFlag
+    je <label> : Jump if equal
+    jne <label> : Jump if not equal
+    For signed data:
+        jl <label> : Jump if op1 < op2
+        jle <label> : Jump if op1 <= op2
+        jg <label> : Jump if op1 > op2
+        jge <label> : Jump of op1 >= op2
+    For unsigned data:
+        jb <label>
+        jbe <label>
+        ja <label>
+        jae <label>
+    loop <label> : Decrement RCX and jump to label if RCX != 0
+    push <op> : Push op onto stack. RSP gets updated automatically
+    pop <op> : Pop op from stack. RSP gets updated automatically
+    call <funcName> : Call the function
+    ret : Return from the function
 
