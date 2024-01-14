@@ -13,7 +13,7 @@ Data registers
     64 bit registers are RAX, RBX, RCX, RDX
     32 bit registers are EAX, EBX, ECX, EDX
     Half of the storage of these registers is used to represent AX, BX, CX, DX registers (16 bit registers)
-     Half of the storage of 16 bit registers is used to represent AH, BH, CH, DH, AL, BL, CL, DL registers (8 bit registers)
+    Half of the storage of 16 bit registers is used to represent AH, BH, CH, DH, AL, BL, CL, DL registers (8 bit registers)
 
     AX - Accumulator: Mainly used for IO, Arithmetic instructions
     BX - Base: Used for addressing index addresses
@@ -154,3 +154,25 @@ Instructions:
     call <funcName> : Call the function
     ret : Return from the function
 
+    _start:
+        mov rcx, [maximum]
+    summation:
+        mov rax, rcx
+        mul rax
+        add [total], rax
+        loop summation
+    finish:
+        mov rax, SUCCESS
+        mov rdi, SYS_exit
+        syscall
+    
+int main() {
+    int maximum = 5;
+    int total = 0;
+    int helper = 0; // RAX
+    summation()
+    finish()
+}
+void summation() {
+
+}
