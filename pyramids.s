@@ -29,20 +29,15 @@ global _start
 ; Functions
 newLowestVolume:
     mov [lowestVolume], rax
-    inc rsi
-    jmp tsa
+    jmp volumeCheckHighest
 newHighestVolume:
     mov [highestVolume], rax
-    inc rsi
     jmp tsa
 newLowestTSA:
     mov [lowestTSA], rax
-    inc rsi
-    loop volume
-    jmp averageCalculations
+    jmp TSACheckHighest
 newHighestTSA:
     mov [highestTSA], rax
-    inc rsi
     loop volume
     jmp averageCalculations
 
@@ -61,6 +56,7 @@ volume:
     je newLowestVolume
     cmp rax, [lowestVolume]
     jl newLowestVolume
+volumeCheckHighest:
     cmp rax, [highestVolume]
     jg newHighestVolume
 tsa:
@@ -79,6 +75,7 @@ tsa:
     je newLowestTSA
     cmp rax, [lowestTSA]
     jl newLowestTSA
+TSACheckHighest:
     cmp rax, [highestTSA]
     jg newHighestTSA
     
