@@ -14,33 +14,36 @@ section .text
 global _start
 newLowest:
     mov [lowest], rax
-    jmp checkHighest
+    jmp checkHighest ; Jumps to check if the same number is the highest (only useful for the first iteration)
 newHighest:
     mov [highest], rax
-    jmp restartLoop
+    jmp restartLoop ; Jumps to code responsibe for restarting the loop
 
 _start:
-    mov rcx, [length]
-    mov rsi, 0
-    mov rax, [numbers+(rsi*8)]
+    mov rcx, [length] ; Looping variable
+    mov rsi, 0 
+    mov rax, [numbers+(rsi*8)] ; Multiplying by 8 due to dq data type
 stats:
     mov rax, [numbers+(rsi*8)]
-    add [total], rax
+    add [total], rax ; Adds to total
     cmp word [lowest], 0
-    je newLowest
+    je newLowest ; Sets current number as lowest if lowest is currently 0
     cmp rax, [lowest]
-    jl newLowest
+    jl newLowest ; Sets current number as lowest if its lower than the current lowest
 checkHighest:
     cmp rax, [highest]
-    jg newHighest
+    jg newHighest ; Sets current number as highest if its higher than the current highest
 restartLoop:
-    inc rsi
-    loop stats
-last:
+    inc rsi ; Move to next item
+    loop stats ; Restart loop
+findAverage:
+    ; Finds the average by dividing the total by length
     mov rax, [total]
+    mov rdx, 0 ; Resets rdx so it doesn't interfere with the division (just in case)
     div dword [length]
     mov [average], rax
 exit:
+    ; Exit
     mov rax, SYS_exit
     mov rdi, SUCCESS
     syscall

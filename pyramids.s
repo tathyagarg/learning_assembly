@@ -29,65 +29,66 @@ global _start
 ; Functions
 newLowestVolume:
     mov [lowestVolume], rax
-    jmp volumeCheckHighest
+    jmp volumeCheckHighest ; Check if the same number is the highest (only useful for the first iteration)
 newHighestVolume:
     mov [highestVolume], rax
-    jmp tsa
+    jmp tsa ; Jump to calculate TSA
 newLowestTSA:
     mov [lowestTSA], rax
-    jmp TSACheckHighest
+    jmp TSACheckHighest ; Check if the same number is the highest (only useful for the first iteration)
 newHighestTSA:
     mov [highestTSA], rax
-    loop volume
-    jmp averageCalculations
+    loop volume ; Jump to restart from volume if rcx more than 0
+    jmp averageCalculations ; Start average calculations if rcx reaches 0
 
 
 _start:
-    mov rcx, [size]
+    mov rcx, [size] ; Iteration count
     mov rsi, 0
 volume:
-    mov rax, [heights+rsi*8]
-    mul qword [widths+rsi*8]
-    mul qword [lengths+rsi*8]
-    div qword [THREE]
-    mov [volumes+rsi*8], rax
-    add [totalVolume], rax
+    mov rax, [heights+rsi*8] ; Gets the height
+    mul qword [widths+rsi*8] ; Multiplies by width
+    mul qword [lengths+rsi*8] ; Multiplies by length
+    div qword [THREE] ; Divides by 3
+    mov [volumes+rsi*8], rax ; Appends to volumes
+    add [totalVolume], rax ; Adds to total
+    ; Checks if volume is lowest so far
     cmp qword [lowestVolume], 0
     je newLowestVolume
     cmp rax, [lowestVolume]
     jl newLowestVolume
-volumeCheckHighest:
+volumeCheckHighest: ; Checks if volume is highest so far
     cmp rax, [highestVolume]
     jg newHighestVolume
 tsa:
-    mov rax, [heights+rsi*8]
-    mul qword [widths+rsi*8]
-    mov r8, rax
-    mov rax, [widths+rsi*8]
-    mul qword [lengths+rsi*8]
-    mov r9, rax
-    mov rax, [lengths+rsi*8]
-    mul qword [heights+rsi*8]
-    add rax, r8
-    add rax, r9
-    add [totalTSA], rax
+    mov rax, [heights+rsi*8] ; Moves height
+    mul qword [widths+rsi*8] ; Multiplies by width
+    mov r8, rax ; Moves result to r8 for later use
+    mov rax, [widths+rsi*8] ; Moves width
+    mul qword [lengths+rsi*8] ; Multiplies by length
+    mov r9, rax ; Moves for later use
+    mov rax, [lengths+rsi*8] ; Moves length
+    mul qword [heights+rsi*8] ; Multuplies with height
+    add rax, r8 ; Unnecessary to move to another register, instead it adds directly
+    add rax, r9 ; Adds to achieve final result (the TSA)
+    add [totalTSA], rax ; Adds to total
+    ; Checks if the TSA is lowest so far
     cmp qword [lowestTSA], 0
     je newLowestTSA
     cmp rax, [lowestTSA]
     jl newLowestTSA
-TSACheckHighest:
+TSACheckHighest: ; Checks if the TSA is highest so far
     cmp rax, [highestTSA]
     jg newHighestTSA
-    
+restartLoop: ; Responsible for restarting loop
     inc rsi
     dec ecx
-    jnz volume
-    jmp averageCalculations
-averageCalculations:
+    jnz volume ; Can't use regulat loop because volume is too far away
+averageCalculations: ; Start average calculations if the loop is complete
     mov rax, [totalVolume]
-    mov rdx, 0
+    mov rdx, 0 ; Resets rdx so it doesn't interfere with division
     div qword [size]
-    mov [averageVolume], rax
+    mov [averageVolume], rax ; Moves average
 
     mov rax, [totalTSA]
     mov rdx, 0
